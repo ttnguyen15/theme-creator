@@ -13,20 +13,29 @@ function App() {
   }
 
   function handleDeleteColor(id) {
-    const afterDeletion = colors.filter((color) => color.id !== id);
-    setColor(afterDeletion);
+    setColor(colors.filter((color) => color.id !== id));
   }
+
+ const handleEditColor = (editedColor) => {
+    const updatedColors = colors.map((color) =>
+      color.id === editedColor.id ? editedColor : color
+    );
+
+    setColor(updatedColors);
+  };
 
   return (
     <>
       <h1>Theme Creator</h1>
-      <ColorForm onSubmitColor={handleAddColor} />
+      <ColorForm onSubmitColor={handleAddColor}
+      initialData={initialColors} />
       {colors.map((color) => {
         return (
           <Color
             key={color.id}
             color={color}
             onDeleteColor={handleDeleteColor}
+            onEditColor={handleEditColor}
           />
         );
       })}
