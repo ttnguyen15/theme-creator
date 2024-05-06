@@ -7,6 +7,7 @@ export default function Color({ color, onDeleteColor, onEditColor }) {
   const [deleteMode, setDeleteMode] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [copyMode, setCopyMode] = useState(false);
+  const [contrastCheck, setContrastCheck] = useState();
 
   function handleDelete() {
     if (deleteMode) {
@@ -41,6 +42,23 @@ export default function Color({ color, onDeleteColor, onEditColor }) {
     };
   }, [copyMode]);
 
+  useEffect (() => {
+    async function contrastCheckStatus() {
+      const response = await fetch(
+        "https://www.aremycolorsaccessible.com/api/are-they",
+        {
+          method: "POST",
+          body: JSON.stringify({ colors:[color.hex, color.contrastText]}),
+          type: "application/json",
+        }
+      );
+      const result = await response.json();
+      console.log(result.overall);
+      setContrastCheck(result.overall);
+    }
+    contrastCheckStatus();
+  }, [color.hex, color.contrastText]);
+
   return (
     <div
       className="color-card"
@@ -54,7 +72,19 @@ export default function Color({ color, onDeleteColor, onEditColor }) {
         {copyMode ? "SUCCESSFULLY COPIED!" : "COPY"}
       </button>
       <h4>{color.role}</h4>
-      <p>contrast: {color.contrastText}</p>
+      <p>contrast: {color.contrastText}</p><span
+        className="contrastCheck"
+        style={{
+          backgroundColor:
+            contrastCheck === "Yup"
+              ? "green"
+              : contrastCheck === "Kinda"
+              ? "orange"
+              : "red",
+        }}
+      >
+        Overall Contrast Score: {contrastCheck}
+      </span><br/>
       {editMode ? (
         <ColorForm
           editMode={editMode}

@@ -45,7 +45,7 @@ export default function ColorForm({
         <br />
         <ColorInput
           id="hex"
-          defaultValue={initialData ? initialData.hex : "#124356"}
+          defaultValue={initialData ? initialData.hex : "#rrggbb"}
         />
       </label>
       <br />
@@ -54,7 +54,7 @@ export default function ColorForm({
         <br />
         <ColorInput
           id="contrastText"
-          defaultValue={initialData ? initialData.contrastText : "#abcdef"}
+          defaultValue={initialData ? initialData.contrastText : "#rrggbb"}
         />
       </label>
       <br />
