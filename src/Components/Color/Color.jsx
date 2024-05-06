@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./Color.css";
 import ColorForm from "../ColorForm/ColorForm";
 
-export default function Color({ color, onDeleteColor, onEdit }) {
+export default function Color({ color, onDeleteColor, onEditColor }) {
   const [deleteMode, setDeleteMode] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
@@ -15,9 +15,12 @@ export default function Color({ color, onDeleteColor, onEdit }) {
   }
 
   function handleEditMode() {
-    setEditMode(true);
+    setEditMode(!editMode);
   }
 
+  function handleExitEditMode() {
+    setEditMode(false);
+  }
 
   return (
     <div
@@ -27,23 +30,27 @@ export default function Color({ color, onDeleteColor, onEdit }) {
         color: color.contrastText,
       }}
     >
-
       <h3 className="color-card-headline">{color.hex}</h3>
       <h4>{color.role}</h4>
       <p>contrast: {color.contrastText}</p>
       {editMode ? (
         <ColorForm
           editMode={editMode}
-          onEditMode={setEditMode}
           initialData={color}
-          onSubmitColor={onEdit}
+          onSubmitColor={onEditColor}
           onCancel={handleEditMode}
+          onExitEditMode={handleExitEditMode}
         />
       ) : deleteMode ? (
         <>
           <p className="color-card-highlight">
             Really delete?
-            <button type="button" onClick={() => {setDeleteMode(false)}}>
+            <button
+              type="button"
+              onClick={() => {
+                setDeleteMode(false);
+              }}
+            >
               CANCEL
             </button>
             <button type="button" onClick={handleDelete}>

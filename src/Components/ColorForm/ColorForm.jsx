@@ -3,9 +3,10 @@ import "../ColorForm/ColorForm.css";
 
 export default function ColorForm({
   onSubmitColor,
-  initialData = { role: "some color", hex: "#123456", contrastText: "#ffffff" },
+  initialData,
   onCancel,
-  editMode
+  editMode,
+  onExitEditMode,
 }) {
   function handleSubmit(event) {
     event.preventDefault();
@@ -18,8 +19,12 @@ export default function ColorForm({
     }
 
     onSubmitColor(data);
-    event.target.reset();
-    event.target.elements.role.focus();
+    /*  event.target.reset();
+    event.target.elements.role.focus();*/
+
+    if (editMode) {
+      onExitEditMode();
+    }
   }
 
   return (
@@ -31,26 +36,30 @@ export default function ColorForm({
           type="text"
           id="role"
           name="role"
-          defaultValue={initialData.role}
+          defaultValue={initialData ? initialData.role : "Color Role"}
         />
       </label>
       <br />
       <label htmlFor="hex">
         Hex
         <br />
-        <ColorInput id="hex" defaultValue={initialData.hex} />
+        <ColorInput
+          id="hex"
+          defaultValue={initialData ? initialData.hex : "#124356"}
+        />
       </label>
       <br />
       <label htmlFor="contrastText">
         Contrast Text
         <br />
-        <ColorInput id="contrastText" defaultValue={initialData.contrastText} />
+        <ColorInput
+          id="contrastText"
+          defaultValue={initialData ? initialData.contrastText : "#abcdef"}
+        />
       </label>
       <br />
-      <button type="submit">
-        {initialData.id ? "UPDATE COLOR" : "ADD COLOR"}
-      </button>
-      {initialData.id && <button onClick={onCancel}>CANCEL</button>}
+      <button type="submit">{editMode ? "UPDATE COLOR" : "ADD COLOR"}</button>
+      {editMode && <button onClick={onCancel}>CANCEL</button>}
     </form>
   );
 }
