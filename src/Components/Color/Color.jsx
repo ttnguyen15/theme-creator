@@ -7,7 +7,7 @@ export default function Color({ color, onDeleteColor, onEditColor }) {
   const [deleteMode, setDeleteMode] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [copyMode, setCopyMode] = useState(false);
-  const [contrastCheck, setContrastCheck] = useState()
+  const [contrastCheck, setContrastCheck] = useState();
 
   function handleDelete() {
     if (deleteMode) {
@@ -42,7 +42,7 @@ export default function Color({ color, onDeleteColor, onEditColor }) {
     };
   }, [copyMode]);
 
-  useEffect (()=>{
+  useEffect (() => {
     async function contrastCheckStatus() {
       const response = await fetch(
         "https://www.aremycolorsaccessible.com/api/are-they",
@@ -58,8 +58,6 @@ export default function Color({ color, onDeleteColor, onEditColor }) {
     }
     contrastCheckStatus();
   }, [color.hex, color.contrastText]);
-
-
 
   return (
     <div
