@@ -1,21 +1,23 @@
 import { useState } from "react";
 import "./Color.css";
+import ColorForm from "../ColorForm/ColorForm";
 
-export default function Color({ color, onDeleteColor }) {
-  const [approveDelete, setApproveDelete] = useState(false);
+export default function Color({ color, onDeleteColor, onEdit }) {
+  const [deleteMode, setDeleteMode] = useState(false);
+  const [editMode, setEditMode] = useState(false);
 
   function handleDelete() {
-    if (approveDelete === false) {
-      setApproveDelete(true);
-    } else {
+    if (deleteMode) {
       onDeleteColor(color.id);
-      setApproveDelete(false);
+    } else {
+      setDeleteMode(true);
     }
   }
 
-  function handleCancel() {
-    setApproveDelete(false);
+  function handleEditMode() {
+    setEditMode(true);
   }
+
 
   return (
     <div
@@ -25,14 +27,23 @@ export default function Color({ color, onDeleteColor }) {
         color: color.contrastText,
       }}
     >
-      <h3 className="color-card-highlight">{color.hex}</h3>
+
+      <h3 className="color-card-headline">{color.hex}</h3>
       <h4>{color.role}</h4>
       <p>contrast: {color.contrastText}</p>
-      {approveDelete ? (
+      {editMode ? (
+        <ColorForm
+          editMode={editMode}
+          onEditMode={setEditMode}
+          initialData={color}
+          onSubmitColor={onEdit}
+          onCancel={handleEditMode}
+        />
+      ) : deleteMode ? (
         <>
-          <p>
+          <p className="color-card-highlight">
             Really delete?
-            <button type="button" onClick={handleCancel}>
+            <button type="button" onClick={() => {setDeleteMode(false)}}>
               CANCEL
             </button>
             <button type="button" onClick={handleDelete}>
@@ -42,6 +53,9 @@ export default function Color({ color, onDeleteColor }) {
         </>
       ) : (
         <>
+          <button type="button" onClick={handleEditMode}>
+            EDIT
+          </button>
           <button type="button" onClick={handleDelete}>
             DELETE
           </button>
